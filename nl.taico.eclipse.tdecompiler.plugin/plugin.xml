@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.startup">
+      <startup class="nl.taico.eclipse.tdecompiler.startup.CFRStartupClass"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.jdt.ui.preferences.JavaBasePreferencePage"
+            class="nl.taico.eclipse.tdecompiler.preferences.PreferencePage"
+            id="nl.taico.eclipse.tdecompiler.preferences.PreferencePage"
+            name="Decompiler">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="nl.taico.eclipse.tdecompiler.preferences.PreferenceInitializer"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            id="nl.taico.eclipse.tdecompiler.editors.CFRClassFileEditor"
+            class="nl.taico.eclipse.tdecompiler.editors.CFRClassFileEditor"
+            contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
+            extensions="class"
+            default="true"
+            icon="icons/jd_16.png"
+            name="CFR Class File Viewer">
+      </editor>
+   </extension>   
+</plugin>

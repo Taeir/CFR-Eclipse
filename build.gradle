@@ -1,0 +1,26 @@
+apply plugin: 'distribution'
+
+// Common configuration //
+allprojects {
+	version='1.0.3'	
+}
+
+subprojects.each { subproject ->
+    evaluationDependsOn(subproject.path)
+}
+
+distributions {
+	site {
+		contents {
+			into('features') {
+				from { fileTree('nl.taico.eclipse.tdecompiler.feature/build/libs') { include '*.jar' } }
+			}
+			into('plugins') {
+				from { fileTree('nl.taico.eclipse.tdecompiler.plugin/build/libs') { include '*.jar' } }
+			}
+			from 'nl.taico.eclipse.tdecompiler.site/site.xml', 'LICENSE', 'NOTICE', 'README.md'
+		}
+	}
+}
+
+installSiteDist.dependsOn subprojects.tasks['jar']

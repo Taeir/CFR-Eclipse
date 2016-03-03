@@ -1,0 +1,46 @@
+apply plugin: 'java'
+
+repositories {
+	maven {
+		url 'https://raw.github.com/java-decompiler/mvn-repo/master'
+	}
+	maven {
+		url 'file://C:/Programming/Projects/Eclipse Plugins/TDecompiler/fakerepo'
+	}
+}
+
+configurations {
+	provided
+	compile.extendsFrom provided
+}
+
+dependencies {
+	compile 'cfr:cfr-common:0.1.14'
+	provided 'jd:eclipse-jee-juno-SR2-minimal:1.0.0'
+}
+
+compileJava {
+	sourceCompatibility = '1.7'
+	targetCompatibility = '1.7'	
+	source 'src'
+}
+
+jar {
+	archiveName baseName + '_' + version + '.' + extension
+	manifest {
+		from 'META-INF/MANIFEST.MF'
+	}	
+	from fileTree('.') {
+		include 'icons/**'
+		include 'about.ini'
+		include 'plugin.xml'
+	}
+	into('lib') {
+		from project.configurations.runtime - project.configurations.provided
+	}
+}
+
+task downloadDependencies(type: Copy) {
+	from project.configurations.runtime
+	into 'lib'
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://taico.nl/cfreclipse/update/">
+      Eclipse Update Site for CFR-Eclipse Plug-in
+   </description>
+   <feature url="features/nl.taico.eclipse.tdecompiler.feature_1.0.3.jar" id="nl.taico.eclipse.tdecompiler.feature" version="1.0.3">
+      <category name="CFR-Eclipse"/>
+   </feature>
+   <category-def name="CFR-Eclipse" label="CFR-Eclipse Plug-in"/>
+</site>
