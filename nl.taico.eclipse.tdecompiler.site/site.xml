@@ -3,7 +3,7 @@
    <description url="http://taico.nl/cfr-eclipse/update/">
       Eclipse Update Site for CFR-Eclipse Plug-in
    </description>
-   <feature url="features/nl.taico.eclipse.tdecompiler.feature_1.0.4.jar" id="nl.taico.eclipse.tdecompiler.feature" version="1.0.4">
+   <feature url="features/nl.taico.eclipse.tdecompiler.feature_1.0.5.jar" id="nl.taico.eclipse.tdecompiler.feature" version="1.0.5">
       <category name="CFR-Eclipse"/>
    </feature>
    <category-def name="CFR-Eclipse" label="CFR-Eclipse Plug-in"/>

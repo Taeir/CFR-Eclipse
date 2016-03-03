@@ -35,8 +35,9 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 		addField(new BooleanFieldEditor(CFRPlugin.PREF_REFORMAT, "Run decompiled code through Eclipse Formatter", feParent));
 		addField(new StringFieldEditor(CFRPlugin.PREF_OUTPUTDIR, "Source Output directory", feParent));
 		
-		Composite c = new Composite(feParent, 2);
+		Composite c = new Composite(feParent, 0);
 		createLabel("Decompiling: ", c);
+		createLabel("", c);
 		for (Settings s : Settings.values()) {
 			addField(new ComboFieldEditor(
 					s.getPrefPath(),
@@ -48,29 +49,41 @@ public class PreferencePage extends FieldEditorPreferencePage implements IWorkbe
 					},
 					c));
 			if (s == Settings.COMMENT_MONITORS) {
-				c = new Composite(feParent, 2);
+//				createDivider(c);
+				c = new Composite(feParent, 0);
 				createLabel("Resugaring: ", c);
+				createLabel("", c);
 			} else if (s == Settings.DECODE_FINALLY) {
-				c = new Composite(feParent, 2);
+//				createDivider(c);
+				c = new Composite(feParent, 0);
 				createLabel("Code Style: ", c);
+				createLabel("", c);
 			} else if (s == Settings.TIDY_MONITORS) {
-				c = new Composite(feParent, 2);
+//				createDivider(c);
+				c = new Composite(feParent, 0);
 				createLabel("Fix code: ", c);
+				createLabel("", c);
 			} else if (s == Settings.RENAME_ENUM_MEMBERS) {
-				c = new Composite(feParent, 2);
+//				createDivider(c);
+				c = new Composite(feParent, 0);
 				createLabel("Remove unnecessary code: ", c);
+				createLabel("", c);
 			} else if (s == Settings.FORCE_AGGRESSIVE_EXCEPTION_AGG) {
-				c = new Composite(feParent, 2);
+//				createDivider(c);
+				c = new Composite(feParent, 0);
 				createLabel("Hide stuff: ", c);
+				createLabel("", c);
 			} else if (s == Settings.HIDE_BRIDGE_METHODS) {
-				c = new Composite(feParent, 2);
+//				createDivider(c);
+				c = new Composite(feParent, 0);
 				createLabel("Debug output: ", c);
+				createLabel("", c);
 			}
 		}
 	}
 	
 	private Label createLabel(String message, Composite parent) {
-		Label result = new Label(parent, 64);
+		Label result = new Label(parent, SWT.WRAP);
         result.setFont(parent.getFont());
         result.setText(message);
         
