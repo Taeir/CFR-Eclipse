@@ -33,7 +33,7 @@ public class CFRPlugin extends AbstractUIPlugin {
 	public static final String PREF_OUTPUTDIR = PREF_ID + ".OutputDir";
 		
 	// URLs
-	public static final String URL_CFRECLIPSE = "http://www.taico.nl/cfreclipse/";
+	public static final String URL_CFRECLIPSE = "http://www.taico.nl/cfr-eclipse/";
 	
 	// The shared instance
 	private static CFRPlugin plugin;

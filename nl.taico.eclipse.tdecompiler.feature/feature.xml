@@ -6,7 +6,7 @@
       provider-name="Taico Aerts"
       plugin="nl.taico.eclipse.tdecompiler.plugin">
 
-   <description url="http://www.example.com/feature">
+   <description>
     CFR-Eclipse is an Eclipse plug-in that allows you to view decompiled sources of classes that don't have source attached.
    </description>
 
@@ -56,7 +56,7 @@ Also add information on how to contact you by electronic and paper mail.
   If the program does terminal interaction, make it output a short
 notice like this when it starts in an interactive mode:
 
-    CFR-Eclipse  Copyright (C) 2016       Taico Aerts
+    CFR-Eclipse  Copyright (C) 2016  Taico Aerts
     This program comes with ABSOLUTELY NO WARRANTY; for details type `show w'.
     This is free software, and you are welcome to redistribute it
     under certain conditions; type `show c' for details.

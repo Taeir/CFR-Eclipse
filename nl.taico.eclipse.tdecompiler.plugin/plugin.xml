@@ -26,7 +26,7 @@
             contributorClass="org.eclipse.ui.texteditor.BasicTextEditorActionContributor"
             extensions="class"
             default="true"
-            icon="icons/jd_16.png"
+            icon="icons/cfr_16.png"
             name="CFR Class File Viewer">
       </editor>
    </extension>   
