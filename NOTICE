@@ -1,4 +1,8 @@
-CFR-Eclipse license - GPLv3
+CFR-Eclipse - Taico Aerts - http://www.taico.nl/cfr-eclipse/ - GPLv3
+
+CFR-Eclipse is based on the similar plugin JD-Eclipse by Emmanuel Dupuy (licensed under GPLv3) (see https://github.com/java-decompiler/jd-eclipse)
 
 Libraries used:
-CFR - MIT License
+CFR - Lee Benfield - http://www.benf.org/other/cfr - MIT License
+
+

@@ -2,7 +2,7 @@ apply plugin: 'distribution'
 
 // Common configuration //
 allprojects {
-	version='1.0.3'	
+	version='1.0.4'	
 }
 
 subprojects.each { subproject ->

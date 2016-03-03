@@ -2,7 +2,7 @@
 <feature
       id="nl.taico.eclipse.tdecompiler.feature"
       label="CFR-Eclipse Plug-in"
-      version="1.0.3"
+      version="1.0.4"
       provider-name="Taico Aerts"
       plugin="nl.taico.eclipse.tdecompiler.plugin">
 
@@ -86,7 +86,7 @@ Public License instead of this License.  But first, please read
          id="nl.taico.eclipse.tdecompiler.plugin"
          download-size="0"
          install-size="0"
-         version="1.0.3"
+         version="1.0.4"
          unpack="false"/>
 
 </feature>

@@ -24,7 +24,7 @@ public class CFRPlugin extends AbstractUIPlugin {
 	private static final String EDITOR_ID = PLUGIN_ID + ".editors.CFRClassFileEditor";	
 	
 	// Versions
-	public static final String VERSION_CFR_ECLIPSE 	= "1.0.3";
+	public static final String VERSION_CFR_ECLIPSE 	= "1.0.4";
 	public static final String VERSION_CFR 			= "0_114";
 
 	// Preferences
