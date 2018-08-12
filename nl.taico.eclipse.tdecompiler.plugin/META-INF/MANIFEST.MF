@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: CFR-Eclipse Plug-in
 Bundle-SymbolicName: nl.taico.eclipse.tdecompiler.plugin;singleton:=true
-Bundle-Version: 1.0.5
+Bundle-Version: 1.1.132
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.editors,
@@ -16,5 +16,5 @@ Require-Bundle: org.eclipse.ui,
 Bundle-Vendor: Taico Aerts
 Bundle-Activator: nl.taico.eclipse.tdecompiler.CFRPlugin
 Bundle-ActivationPolicy: lazy
-Bundle-ClassPath: lib/cfr_0_114.jar,
+Bundle-ClassPath: lib/cfr_0_132.jar,
  .

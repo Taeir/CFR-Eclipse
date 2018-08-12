@@ -15,7 +15,7 @@ configurations {
 }
 
 dependencies {
-	compile 'cfr:cfr-common:0.1.14'
+	compile 'cfr:cfr-common:0.1.32'
 	provided 'jd:eclipse-jee-juno-SR2-minimal:1.0.0'
 }
 

@@ -1,8 +1,39 @@
 /*
- * Copyright (c) 2016 Taico Aerts
- * This program is made available under the terms of the GPLv3 License.
+ * CFR-Eclipse: Eclipse plugin for Java decompilation with CFR
+ * Copyright (c) 2016-2018 Taico Aerts
+ * Copyright (c) 2011-2018 Lee Benfield
  * 
- * CFR-Eclipse is based on the similar plugin JD-Eclipse by Emmanuel Dupuy (licensed under GPLv3) (see https://github.com/java-decompiler/jd-eclipse)
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ * 
+ * -----------------------------------------------------------------------
+ * 
+ * CFR-Eclipse is based on the similar plugin JD-Eclipse by
+ * Emmanuel Dupuy (licensed under GPLv3)
+ * (see <https://github.com/java-decompiler/jd-eclipse>)
+ * 
+ * -----------------------------------------------------------------------
+ * 
+ * NOTICES:
+ *   CFR
+ *   Copyright (c) 2011-2018 Lee Benfield
+ *   MIT License
+ *   See <http://www.benf.org/other/cfr/index.html>
+ * 
+ *   JD-Eclipse
+ *   Copyright (c) 2008-2015 Emmanuel Dupuy
+ *   GPLv3 License
+ *   See <https://github.com/java-decompiler/jd-eclipse>
  */
 package nl.taico.eclipse.tdecompiler.editors;
 
@@ -14,14 +45,19 @@ import java.io.FileWriter;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.regex.Pattern;
 
 import org.benf.cfr.reader.Main;
+import org.benf.cfr.reader.bytecode.analysis.parse.utils.Pair;
 import org.benf.cfr.reader.state.ClassFileSourceImpl;
 import org.benf.cfr.reader.state.DCCommonState;
+import org.benf.cfr.reader.util.AnalysisType;
 import org.benf.cfr.reader.util.getopt.GetOptParser;
 import org.benf.cfr.reader.util.getopt.Options;
 import org.benf.cfr.reader.util.getopt.OptionsImpl;
@@ -77,6 +113,8 @@ public class CFRSourceMapper extends SourceMapper {
 	}
 	
 	protected String getDecompiledSource(String basePath, String classPath) throws Exception {
+		String result = null;
+		
 		//Determine the output folder
 		File dsrcFolder = getDecompiledSrcFolder(basePath);
 		
@@ -86,28 +124,63 @@ public class CFRSourceMapper extends SourceMapper {
 			
 			//If the file exists and the settings match, return it.
 			if (cfrFile.exists() && settingsMatch(cfrFile)) {
-				return getDecompiledResult(dsrcFolder, basePath, classPath);
+				result = getDecompiledResult(dsrcFolder, basePath, classPath, true);
 			} else {
 				CFRPlugin.log(Status.WARNING, "Output directory already exists, but cfreclipse.txt file has different settings/does not exist. Deleting old folder.");
 				deleteDirectory(dsrcFolder);
 			}
 		}
 		
-		//Decompile the jar
-		decompileCFR(generateCFRArguments(basePath, dsrcFolder.getAbsolutePath()));
-		
-		//Write our settings
-		writeCurrentSettings(new File(dsrcFolder, "cfreclipse.txt"));
-		
-		//Get the result
-		String result = getDecompiledResult(dsrcFolder, basePath, classPath);
+		if (result == null) {
+			//Decompile the jar
+			decompileCFR(generateCFRArguments(basePath, dsrcFolder.getAbsolutePath(), classPath));
+			
+			//Write our settings
+			writeCurrentSettings(new File(dsrcFolder, "cfreclipse.txt"));
+			
+			//Get the result
+			result = getDecompiledResult(dsrcFolder, basePath, classPath, false);
+		}
 		
 		//Format the result
 		if (CFRPlugin.getDefault().getPreferenceStore().getBoolean(CFRPlugin.PREF_REFORMAT)) {
-			return TFormatter.format(result);
+			CFRPlugin.log(Status.WARNING, "[Debug] Formatting enabled");
+			return addDebugInfo(basePath, classPath, TFormatter.format(result));
 		} else {
-			return result;
+			CFRPlugin.log(Status.WARNING, "[Debug] Formatting disabled");
+			return addDebugInfo(basePath, classPath, result);
 		}
+	}
+	
+	protected String addJavaDocs(String basePath, String classPath, String result) {
+		
+		
+		//TODO
+		return result;
+	}
+	
+	protected String addDebugInfo(String basePath, String classPath, String result) {
+		IPreferenceStore store = CFRPlugin.getDefault().getPreferenceStore();
+		
+		//If not in debug mode, don't add debug info
+		if (!store.getBoolean(CFRPlugin.PREF_DEBUG)) return result;
+		
+		StringBuilder sb = new StringBuilder(result.length() + 2048);
+		sb.append("/*");
+		sb.append(" * Debug info: ").append(System.lineSeparator());
+		sb.append(" *     CFR-Eclipse version: ").append(CFRPlugin.VERSION_CFR_ECLIPSE).append(System.lineSeparator());
+		sb.append(" *     CFR version: ").append(CFRPlugin.VERSION_CFR).append(System.lineSeparator());
+		sb.append(" *     Formatting: ").append(store.getBoolean(CFRPlugin.PREF_REFORMAT)).append(System.lineSeparator());
+		sb.append(" *     Output path: ").append(store.getString(CFRPlugin.PREF_OUTPUTDIR)).append(System.lineSeparator());
+		sb.append(" *     CFR Settings: ").append(System.lineSeparator());
+		
+		for (Settings s : Settings.values()) {
+			sb.append(" *     ").append(s.getParam()).append('=').append(s.getValue(store)).append(System.lineSeparator());
+		}
+		sb.append(" */").append(System.lineSeparator());
+		
+		sb.append(result);
+		return sb.toString();
 	}
 	
 	/**
@@ -193,32 +266,52 @@ public class CFRSourceMapper extends SourceMapper {
 	 */
 	protected static void decompileCFR(String[] args) {
 		GetOptParser getOptParser = new GetOptParser();
-	    Options options;
+		
+		List<String> files;
+		Options options;
 	    try {
-	        options = getOptParser.parse(args, OptionsImpl.getFactory());
+	    	Pair<List<String>, Options> processedArgs = getOptParser.parse(args, OptionsImpl.getFactory());
+	        files = processedArgs.getFirst();
+            options = processedArgs.getSecond();
 	    } catch (Exception e) {
 	    	CFRPlugin.log(Status.ERROR, "Error while parsing arguments!", e);
 	    	return;
 	    }
-	    
-	    if (options.getOption(OptionsImpl.FILENAME) == null) {
-	    	CFRPlugin.log(Status.ERROR, "No filename specified!");
+
+	    //Check if there are any files to decompile
+	    if (files.isEmpty()) {
+	    	CFRPlugin.log(Status.ERROR, "No files specified!");
 	        return;
 	    }
 	    
 	    ClassFileSourceImpl classFileSource = new ClassFileSourceImpl(options);
-	    DCCommonState dcCommonState = new DCCommonState(options, classFileSource);
-	    String path = options.getOption(OptionsImpl.FILENAME);
-	    String type = options.getOption(OptionsImpl.ANALYSE_AS);
-	    if (type == null) {
-	        type = dcCommonState.detectClsJar(path);
-	    }
 	    
-	    DumperFactoryImpl dumperFactory = new DumperFactoryImpl();
-	    if (type.equals("jar")) {
-	        Main.doJar(dcCommonState, path, dumperFactory);
-	    } else {
-	        Main.doClass(dcCommonState, path, dumperFactory);
+	    boolean skipInnerClass = files.size() > 1 && !options.getOption(OptionsImpl.SKIP_BATCH_INNER_CLASSES);
+	    
+	    //First sort all the files and then iterate over them
+	    Collections.sort(files);
+	    for (String path : files) {
+	    	classFileSource.clearConfiguration();
+	    	
+	    	DCCommonState dcCommonState = new DCCommonState(options, classFileSource);
+	    	DumperFactoryImpl dumperFactory = new DumperFactoryImpl(options);
+	    	
+	    	path = classFileSource.adjustInputPath(path);
+	    	
+		    AnalysisType type = options.getOption(OptionsImpl.ANALYSE_AS);
+		    if (type == null) {
+		        type = dcCommonState.detectClsJar(path);
+		    }
+		    
+		    //Call the corresponding main method for handling the file
+		    if (type == AnalysisType.JAR) {
+		        Main.doJar(dcCommonState, path, dumperFactory);
+		    } else if (type == AnalysisType.CLASS) {
+		        Main.doClass(dcCommonState, path, skipInnerClass, dumperFactory);
+		    } else {
+		    	//Skip WAR
+		    	continue;
+		    }
 	    }
 	}
 	
@@ -233,13 +326,16 @@ public class CFRSourceMapper extends SourceMapper {
 	 * 		the (absolute) path to the original binary/binaries
 	 * @param classPath
 	 * 		the fully qualified class path (nl/taico/ClassName.class)
+	 * @param canBeMissing
+	 * 		if {@code true}, this method returns null when the file is missing.
+	 * 		if {@code false}, this method returns comments when the file is missing.
 	 * 
 	 * @return
 	 * 		the decompiled source of the given class
 	 * 
 	 * @throws Exception
 	 */
-	protected String getDecompiledResult(File srcOutputFolder, String basePath, String classPath) throws Exception {
+	protected String getDecompiledResult(File srcOutputFolder, String basePath, String classPath, boolean canBeMissing) throws Exception {
 		File srcFile = new File(srcOutputFolder, classPath.replace('/', File.separatorChar).replace(".class", ".java"));
 		if (srcFile.exists()) {
 			StringBuilder sb = new StringBuilder();
@@ -251,6 +347,8 @@ public class CFRSourceMapper extends SourceMapper {
 			}
 			
 			return sb.toString();
+		} else if (canBeMissing) {
+			return null;
 		} else {
 			return "// Decompiled file could not be found: " + System.lineSeparator() +
 					"//   BasePath:  " + basePath  + System.lineSeparator() +
@@ -296,14 +394,16 @@ public class CFRSourceMapper extends SourceMapper {
 	 * @return
 	 * 		an array of arguments
 	 */
-	protected String[] generateCFRArguments(String path, String outputdir) {
+	protected String[] generateCFRArguments(String path, String outputdir, String classPath) {
 		IPreferenceStore store = CFRPlugin.getDefault().getPreferenceStore();
 		
-        String[] result = new String[Settings.values().length * 2 + 3];
+        String[] result = new String[Settings.values().length * 2 + 5];
         result[0] = path;
         result[1] = "--outputdir";
         result[2] = outputdir;
-        int index = 3;
+        result[3] = "--jarfilter";
+        result[4] = Pattern.quote(classPath.substring(0, classPath.length() - 6).replace("/", "."));
+        int index = 5;
         for (Settings setting : Settings.values()) {
         	String val = setting.getValue(store);
         	if (val.isEmpty()) continue;

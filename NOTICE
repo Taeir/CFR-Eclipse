@@ -1,8 +1,20 @@
-CFR-Eclipse - Taico Aerts - http://www.taico.nl/cfr-eclipse/ - GPLv3
+CFR-Eclipse
+Copyright (c) 2016-2018 Taico Aerts
+GPLv3 License
+https://www.taico.nl/cfr-eclipse/
 
-CFR-Eclipse is based on the similar plugin JD-Eclipse by Emmanuel Dupuy (licensed under GPLv3) (see https://github.com/java-decompiler/jd-eclipse)
+All credit should go to Lee Benfield for creating CFR!
 
-Libraries used:
-CFR - Lee Benfield - http://www.benf.org/other/cfr - MIT License
+CFR-Eclipse is based on the similar plugin JD-Eclipse by Emmanuel Dupuy (see https://github.com/java-decompiler/jd-eclipse)
 
+NOTICES:
+- CFR
+  Copyright (c) 2011-2018 Lee Benfield
+  MIT License
+  http://www.benf.org/other/cfr
+  
+- JD-Eclipse
+  Copyright (c) 2008-2015 Emmanuel Dupuy
+  GPLv3 License
+  https://github.com/java-decompiler/jd-eclipse
 

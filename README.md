@@ -1,52 +1,65 @@
-#CFR-Eclipse
-
+# CFR-Eclipse
 CFR-Eclipse, a Java decompiler plug-in for the Eclipse platform.
 
-![](http://jd.benow.ca/img/screenshot8.png)
+## Description
+CFR-Eclipse is an Eclipse plug-in that allows you to view decompiled sources of classes that don't have source attached.
 
-- Java Decompiler projects home page: [http://jd.benow.ca](http://jd.benow.ca)
-- Java Decompiler Wikipedia page: [http://en.wikipedia.org/wiki/Java_Decompiler](http://en.wikipedia.org/wiki/Java_Decompiler)
-- JD-Eclipse source code: [https://github.com/java-decompiler/jd-eclipse](https://github.com/java-decompiler/jd-eclipse)
+This plugin uses the Java decompiler CFR by Lee Benfield (see [http://www.benf.org/other/cfr/index.html](http://www.benf.org/other/cfr/index.html)).
 
-##Description
-JD-Eclipse is a plug-in for the Eclipse platform. It allows you to 
-display all the Java sources during your debugging process, even if 
-you do not have them all.
-
-##How to build JD-Eclipse ?
-###With Gradle:
-```
-> ./gradlew installSiteDist
-```
-generate _"build/install/jd-eclipse-site"_
-###With Eclipse:
+## How to build CFR-Eclipse ?
+### With Eclipse:
 - Download dependencies
 ```
 > ./gradlew downloadDependencies
 ```
-- Launch _Eclipse_,
-- Import the 3 _"Existing Projects into Workspace"_ by selecting the parent project folder,
-- Export _"Deployable features"_,
-- Copy _"site.xml"_ to the destination directory.
+- Launch _Eclipse_
+- Import the 3 _"Existing Projects into Workspace"_ by selecting the parent project folder
+- Export _"Deployable features"_
+- Copy _"site.xml"_ to the destination directory
 
-##How to install JD-Eclipse ?
-1. Build or download & unzip _"jd-eclipse-site-x.y.z.zip"_,
-2. Launch _Eclipse_,
-3. Click on _"Help > Install New Software..."_,
-4. Click on button _"Add..."_ to add an new repository,
-5. Enter _"JD-Eclipse Update Site"_ and select the local site directory,
-6. Check _"Java Decompiler Eclipse Plug-in"_,
-7. Next, next, next... and restart.
+## How to install CFR-Eclipse ?
+1. Launch _Eclipse_
+2. Click on _"Help > Install New Software..."_
+3. Click on button _"Add..."_ to add a new repository
+4. Enter _"CFR-Eclipse"_ as name and _"http://taico.nl/cfr-eclipse/update"_ as location
+5. Select _"CFR-Eclipse"_ from the drop down menu
+6. Check _"CFR Eclipse Plug-in"_
+7. Next, next, next... and restart
 
-##How to check the file associations ?
+## How to check the file associations ?
 Click on _"Window > Preferences > General > Editors > File Associations"_
 - _"*.class"_ : _Eclipse_ _"Class File Viewer"_ is selected by default.
-- _"*.class without source"_ : _"JD Class File Viewer"_ is selected by default.
+- _"*.class without source"_ : _"CFR Class File Viewer"_ is selected by default.
 
-##How to configure JD-Eclipse ?
+## How to configure CFR-Eclipse ?
 Click on _"Window > Preferences > Java > Decompiler"_
 
-##How to uninstall JD-Eclipse ?
+## How to uninstall CFR-Eclipse ?
 1. Click on _"Help > About Eclipse > Installation Details"_,
-2. Select _"JD-Eclipse Plug-in"_,
+2. Select _"CFR-Eclipse Plug-in"_,
 3. Click on _"Uninstall..."_.
+
+## Changelog
+**1.1.132 (2018-08-12)**  
+* Update CFR to version 0_132 and updated settings accordingly
+* Added more debug info possibilities
+* Fixed some bugs by using jarfilter 
+* Added CFR version to version number
+
+**1.0.5**  
+Update CFR to version 0_115
+
+**1.0.4**  
+Fix library issues
+
+**1.0.3**  
+Update CFR to version 0_114
+
+**1.0.2**  
+Bugfixes
+
+**1.0.1**  
+Added settings panel
+
+**1.0.0**  
+Initial release
