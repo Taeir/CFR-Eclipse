@@ -6,6 +6,8 @@ CFR-Eclipse is an Eclipse plug-in that allows you to view decompiled sources of 
 
 This plugin uses the Java decompiler CFR by Lee Benfield (see [http://www.benf.org/other/cfr/index.html](http://www.benf.org/other/cfr/index.html)).
 
+CFR-Eclipse is based on the similar plugin JD-Eclipse by Emmanuel Dupuy (see [https://github.com/java-decompiler/jd-eclipse](https://github.com/java-decompiler/jd-eclipse))
+
 ## How to build CFR-Eclipse ?
 ### With Eclipse:
 - Download dependencies
